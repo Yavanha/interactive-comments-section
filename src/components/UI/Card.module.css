@@ -1,0 +1,4 @@
+.card {
+    background-color: var(--neutral--white);
+    border-radius: .5rem;
+}

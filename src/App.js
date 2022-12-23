@@ -1,8 +1,12 @@
 import './App.css';
 
+import Comments from "./components/comments/Comments"
+
 function App() {
   return (
-    <div>Hello Wordl</div>
+    <main className="main-container">
+        <Comments />
+    </main>
   );
 }
 

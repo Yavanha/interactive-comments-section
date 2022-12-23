@@ -34,6 +34,31 @@ body {
   box-sizing: inherit;
 }
 
+button {
+  border: none;
+  background: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
+
+
 .lighter {
   font-weight: 400;
 }
@@ -45,3 +70,5 @@ body {
 .bold {
   font-weight: 700;
 }
+
+

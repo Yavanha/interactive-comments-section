@@ -1,0 +1,83 @@
+.comment-item {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    column-gap: 2rem;
+}
+
+
+
+
+
+.username,
+.created-at {
+    font-size: 1.5rem;
+}
+
+
+.username {
+    font-weight: 700;
+    color: var(--neutral-dark--blue);
+}
+
+
+.content,
+.created-at {
+    color : var(--neutral--grayish-blue);
+    font-weight: 400;
+}
+
+
+.replyingto {
+    display: inline-block;
+    margin-right: .2rem;
+    color :var(--primary-moderate--blue);
+    font-weight: 700;
+}
+.content {
+    line-height: 1.5;
+}
+
+.actions {
+    padding: 1rem .5rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons { 
+    background-color: var( --neutral-light--gray);
+    display: flex;
+    border-radius: .5rem;
+}
+
+.buttons > * {
+    padding: 1rem;
+    font-weight: 700;
+
+}
+
+
+.buttons :is(button) {
+    cursor: pointer;
+    color : var( --primary-light--grayish-blue)
+
+    
+}
+
+.score {
+    color : var(--neutral--grayish-blue);
+    user-select: none;
+}
+
+
+
+
+
+
+
