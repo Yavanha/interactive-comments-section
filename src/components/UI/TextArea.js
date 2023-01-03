@@ -1,13 +1,15 @@
 
+import React from 'react';
 
-const TextArea = props => {
+
+const TextArea = React.forwardRef((props, ref) => {
 
 
     return (
-        <textarea className={props.className} rows="5" placeholder={props.placeholder} >
+        <textarea  ref={ref} className={props.className} rows={props.rows} placeholder={props.placeholder} >
 
         </textarea>
     )
-}
+})
 
 export default TextArea;

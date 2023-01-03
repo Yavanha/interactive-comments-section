@@ -1,0 +1,34 @@
+.likes { 
+    background-color: var( --neutral-light--gray);
+    display: flex;
+    border-radius: .5rem;
+    min-width: 4rem;
+    justify-content: center;
+}
+
+.likes > * {
+    padding: 1rem;
+    font-weight: 700;
+
+}
+
+
+.likes :is(button) {
+    cursor: pointer;
+    color : var( --primary-light--grayish-blue)
+
+    
+}
+
+.score {
+    color : var(--neutral--grayish-blue);
+    user-select: none;
+    text-align: center;
+}
+
+
+@media screen and (min-width: 40em) {
+    .likes {
+        flex-direction: column;
+    }
+}

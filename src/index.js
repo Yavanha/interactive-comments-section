@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import CommnentsProvider from './store/CommentsProvider';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CommnentsProvider>
+      <App />
+
+    </CommnentsProvider>
   </React.StrictMode>
 );
 

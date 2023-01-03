@@ -1,0 +1,47 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    min-height: 100vh;
+    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.modal {
+    position: fixed;
+    z-index: 30;
+    inset : 30% 10% auto 10%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+    padding: 2rem;
+    animation: slide-down 300ms ease-out forwards;
+
+}
+
+
+@media screen and (min-width: 40em) {
+    .modal {
+        inset : 30% 35% auto 35%;
+    }
+
+    .modal button {
+        width: 100%;
+    }
+}
+
+
+  
+@keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-3rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

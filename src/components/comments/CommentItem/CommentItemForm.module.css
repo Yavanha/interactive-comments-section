@@ -5,10 +5,9 @@
 
 .footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2rem  ;
 }
+
+
 
 .send {
     background-color: var(--primary-moderate--blue);
@@ -27,4 +26,42 @@
     font-size: 1.8rem;
     color : var(--neutral-dark--blue);
     border-radius: .5rem;
+}
+
+
+
+@media screen and (max-width: 39.99em) {
+
+    .footer {
+ 
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 2rem  ;
+    }
+
+    .footer > textarea {
+        display: none;
+    }
+}
+
+
+@media screen and (min-width: 40em) {
+    .form > textarea {
+        display: none;
+    }
+
+    .footer {
+        align-items: flex-start;
+        column-gap: 2rem;
+    }
+
+    .textarea {
+        padding: 1rem 2rem;
+    }
+
+
+    .avatar-form {
+        width: 6rem;
+        height: 6rem;
+    }
 }

@@ -10,11 +10,16 @@ const Replies = props => {
 
         <CommentItem
             key={`reply_${reply.id}`}
+            parent={props.parent}
+            id={reply.id}
+            author={reply.author}
             content={reply.content}
             user={reply.user}
             score={reply.score}
             createdAt={reply.createdAt}
+            currentUser={props.currentUser}
             replyingTo={reply.replyingTo}
+            onDelete={props.onDelete}
         />
     ))
 
