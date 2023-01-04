@@ -19,14 +19,6 @@
     border-radius: .5rem;
 }
 
-.textarea {
-    border: .1rem solid var(--neutral-light--gray);
-    width: 100%;
-    padding: 1rem 2rem;
-    font-size: 1.8rem;
-    color : var(--neutral-dark--blue);
-    border-radius: .5rem;
-}
 
 
 

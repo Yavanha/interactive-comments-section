@@ -22,6 +22,38 @@ const commentReducer = (state, action) => {
         }
     }
 
+    if (action.type === 'EDIT_COMMENT') {
+        updatedComments = [...state.comments]
+
+        if(action.data.parent !== undefined) { 
+            const commentIndex = updatedComments.findIndex(c => c.id === action.data.parent)
+            const updatedReplies = [...updatedComments[commentIndex].replies]
+            const replyIndex = updatedReplies.findIndex(c => c.id === action.data.id)
+            
+            updatedReplies[replyIndex] = {
+                ...updatedReplies[replyIndex],
+                content: action.data.content
+            }
+
+            
+            updatedComments[commentIndex] = {
+                ...updatedComments[commentIndex],
+                replies: updatedReplies
+            }
+        } else {
+            const commentIndex = updatedComments.findIndex(c => c.id === action.data.id)
+            updatedComments[commentIndex] = {
+                ...updatedComments[commentIndex],
+                content: action.data.content,
+            }
+        }
+
+        return {
+            ...state,
+            comments: updatedComments,
+        }
+    }
+
 
 
     if (action.type === 'CHANGE_SCORE') {
@@ -53,7 +85,6 @@ const commentReducer = (state, action) => {
                     ...state.currentUser,
                     likedReplies: state.currentUser.likedReplies.filter(r =>  r !== action.data.id)
                 }
-                console.log(updatedCurrentUser.likedReplies, action.data.id)
             }
 
 
@@ -139,6 +170,14 @@ const CommnentsProvider = props => {
         })
     }
 
+    const editCommentHandler = data => {
+        dispatchCommentAction({
+            type: 'EDIT_COMMENT',
+            data
+        })
+
+    }
+
     const removeCommentHandler = () => {
         dispatchCommentAction({
             type: 'DELETE_COMMENT',
@@ -177,6 +216,7 @@ const CommnentsProvider = props => {
         saveBackup: saveBackupHandler,
         resetBackup: resetBackupHandler,
         changeScore: changeScoreHandler,
+        editComment : editCommentHandler
     }
 
 

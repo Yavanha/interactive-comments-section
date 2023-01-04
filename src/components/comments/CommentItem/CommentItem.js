@@ -7,8 +7,9 @@ import ReplyIcon from '../../UI/Icon/ReplyIcon';
 import DeleteIcon from '../../UI/Icon/DeleteIcon';
 import EditIcon from '../../UI/Icon/EditIcon';
 import ScoreButton from './ScoreButton';
-import { Fragment, useContext } from 'react';
+import { Fragment, useContext, useState, useRef } from 'react';
 import CommentsContext from '../../../store/comments-store';
+import TextArea from '../../UI/TextArea';
 
 
 
@@ -17,10 +18,12 @@ const CommentItem = props => {
     let options;
     const commentsCtx = useContext(CommentsContext)
     const isCurrentUser = commentsCtx.currentUser.username === props.user.username
+    const editMsg = useRef()
 
     const likedComments = props.parent ? commentsCtx.currentUser.likedReplies : commentsCtx.currentUser.likedComments
 
-    console.log({likedComments})
+    const [editMode, setEditMode] = useState(false)
+
 
     const deleteCommentHandler = () => {
         const comment = {
@@ -31,7 +34,29 @@ const CommentItem = props => {
         commentsCtx.saveBackup(comment)
 
         props.onDelete()
-    } 
+    }
+
+    const editCommentHandler = () => {
+   
+        setEditMode(true)
+    }
+
+    const confirmEditHandler = () => {
+        const data = {
+            id : props.id,
+            parent : props.parent,
+            content : editMsg.current.value
+        }
+        commentsCtx.editComment(data)
+        setEditMode(false)
+
+        
+    }
+
+    const cancelEditHandler = () => {
+        setEditMode(false)
+
+     }
     
     
     const minusHandler = (e) => {
@@ -56,10 +81,19 @@ const CommentItem = props => {
 
 
     if (isCurrentUser) {
-        options = (<Fragment >
-            <button onClick={deleteCommentHandler} className={`${classes['button-icon']} ${classes['button-icon--red']}`}><DeleteIcon />Delete</button>
-            <button className={classes['button-icon']}><EditIcon />Edit</button>
-        </Fragment>)
+        if(editMode) {
+            options = <Fragment>
+                <button onClick={cancelEditHandler} className={`${classes['button-icon']} ${classes['button-icon--red']}`}><DeleteIcon />Cancel</button>
+                <button onClick={confirmEditHandler} className={classes['button-icon']}><EditIcon />Confirm</button>
+            </Fragment>
+
+        } else {
+            options = (<Fragment >
+                <button onClick={deleteCommentHandler} className={`${classes['button-icon']} ${classes['button-icon--red']}`}><DeleteIcon />Delete</button>
+                <button onClick={editCommentHandler} className={classes['button-icon']}><EditIcon />Edit</button>
+            </Fragment>)
+        }
+      
     } else {
         options = (<div className={classes.options}>
             <button  className={classes['button-icon']}> <ReplyIcon />Reply</button >
@@ -89,10 +123,11 @@ const CommentItem = props => {
                         {options}
                     </div>
                 </header>
-                <p className={classes.content}>
+               { !editMode &&  <p className={classes.content}>
                     {props.replyingTo && <span className={classes.replyingto}>@{props.replyingTo}</span>}
                     {props.content}
-                </p>
+                </p>}
+                {editMode && <TextArea ref={editMsg} rows="3" defaultValue={props.content}/>}
 
             </div>
             <div className={classes.actions}>
