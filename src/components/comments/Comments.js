@@ -1,4 +1,4 @@
-import { Fragment, useContext, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useRef, useState } from "react";
 
 
 import classes from "./Comments.module.css"
@@ -13,21 +13,35 @@ import CommentsContext from "../../store/comments-store";
 const Comments = props => {
 
     const commentsCtx = useContext(CommentsContext)
-
+    const bottomViews = useRef([])
     
-    const onSubmitCommentHandler = (data) => {  
+    const submitCommentHandler = (data) => {
 
         const comment = {
             ...data,
-            replies : []
+            replies: []
         }
         commentsCtx.addComment(comment)
     }
 
+    useEffect(() => {
+        bottomViews.current = bottomViews.current.slice(0, commentsCtx.comments.length)
+    }, [commentsCtx.comments])
 
-    const comments = commentsCtx.comments.map(comment =>
+
+
+    const submitReplyHandler = (id) => {
+        const index = commentsCtx.comments.findIndex(c => c.id === id)
+        if(bottomViews.current[index] && bottomViews.current[index].lastElementChild)
+            bottomViews.current[index].lastElementChild.scrollIntoView({ behavior: 'smooth' })
+    }
+
+
+    const comments = commentsCtx.comments.map((comment, i) =>
     (
         <Fragment key={`comment_${comment.id}`}>
+  
+
             <CommentItem
                 id={comment.id}
                 content={comment.content}
@@ -35,12 +49,16 @@ const Comments = props => {
                 score={comment.score}
                 createdAt={comment.createdAt}
                 onDelete={props.onDelete}
+                onSubmitReply={submitReplyHandler}
             />
-            {comment.replies.length > 0 &&
-                <Replies onDelete={props.onDelete}
+
+            
+               { comment.replies.length > 0 && <Replies onDelete={props.onDelete}
                     parent={comment.id}
                     replies={comment.replies}
-                 />}
+                    ref={ el => bottomViews.current[i] = el}
+                    onSubmitReply={submitReplyHandler}
+                />}
         </Fragment>
 
     ))
@@ -50,7 +68,7 @@ const Comments = props => {
     return (
         <section className={classes.comments}>
             {comments}
-            <CommentItemForm currentUser={datasJSON.currentUser} rows="3"  onSubmit={onSubmitCommentHandler} />
+            <CommentItemForm currentUser={datasJSON.currentUser} rows="3" onSubmit={submitCommentHandler} />
         </section>
     )
 }
