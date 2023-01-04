@@ -11,13 +11,15 @@ const CommentItemForm = props => {
 
     const msgInputRef = useRef()
 
-    const commentCtx = useContext(CommentsContext)
+  
 
     const sendCommentHandler = (event) => {
         event.preventDefault()
         const value = msgInputRef.current.value.trim()
         if (value.length > 0) {
-            const comment = {
+
+         
+            const data = {
                 id: (Math.random() + 'c1'),
                 content: value,
                 createdAt: "1 min ago",
@@ -26,23 +28,19 @@ const CommentItemForm = props => {
                     image: { ...props.currentUser.image },
                     username: props.currentUser.username
                 }, 
-                replies : []
-
             }
-            commentCtx.addComment(comment)
+            props.onSubmit(data)
             msgInputRef.current.value = ""
         }
-
-
     }
 
         return (
             <Card className={classes['container-form']}>
                 <form onSubmit={sendCommentHandler} className={classes.form}>
-                    <TextArea ref={msgInputRef} className={classes.textarea} placeholder="Add a commment..." rows="4" />
+                    <TextArea ref={msgInputRef} className={classes.textarea} placeholder="Add a commment..." rows={props.rows} />
                     <div className={classes.footer}>
                         <Avatar className={classes['avatar-form']} src={props.currentUser.image.webp} alt="Avatar of the current user" />
-                        <TextArea ref={msgInputRef} className={classes.textarea} defaultValue={props.defaultValue} placeholder="Add a commment..." rows="4" />
+                        <TextArea ref={msgInputRef} className={classes.textarea} defaultValue={props.defaultValue} placeholder="Add a commment..." rows={props.rows} />
                         <button className={classes.send} type="submit" >send</button>
                     </div>
                 </form>

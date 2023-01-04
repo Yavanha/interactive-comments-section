@@ -1,15 +1,18 @@
+import { Fragment, useContext, useState, useRef } from 'react';
+
 import classes from './CommentItem.module.css'
+
+import CommentsContext from '../../../store/comments-store';
 
 import Card from "../../UI/Card";
 import Avatar from '../../UI/Avatar';
 import ReplyIcon from '../../UI/Icon/ReplyIcon';
-
 import DeleteIcon from '../../UI/Icon/DeleteIcon';
 import EditIcon from '../../UI/Icon/EditIcon';
-import ScoreButton from './ScoreButton';
-import { Fragment, useContext, useState, useRef } from 'react';
-import CommentsContext from '../../../store/comments-store';
 import TextArea from '../../UI/TextArea';
+
+import ScoreButton from './ScoreButton';
+import CommentItemForm from './CommentItemForm';
 
 
 
@@ -17,13 +20,14 @@ const CommentItem = props => {
 
     let options;
     const commentsCtx = useContext(CommentsContext)
-    const isCurrentUser = commentsCtx.currentUser.username === props.user.username
+    const currentUser  = commentsCtx.currentUser;
+    const isCurrentUser = currentUser.username === props.user.username
     const editMsg = useRef()
 
     const likedComments = props.parent ? commentsCtx.currentUser.likedReplies : commentsCtx.currentUser.likedComments
 
     const [editMode, setEditMode] = useState(false)
-
+    const [replyMode, setReplyMode] = useState(false)
 
     const deleteCommentHandler = () => {
         const comment = {
@@ -48,16 +52,29 @@ const CommentItem = props => {
             content : editMsg.current.value
         }
         commentsCtx.editComment(data)
-        setEditMode(false)
-
-        
+        setEditMode(false)        
     }
 
     const cancelEditHandler = () => {
         setEditMode(false)
-
-     }
+    }
     
+
+    const replyCommentHandler = () => {
+        setReplyMode(true)
+    }
+
+    const submitReplyHandler = (data) => {
+        const reply ={
+            ...data,
+            id : Math.random() + 'r',
+            target : props.parent ? props.parent : props.id,
+            replyingTo : props.user.username
+        }
+        commentsCtx.replyComment(reply)
+        setReplyMode(false)
+
+    }
     
     const minusHandler = (e) => {
         const data = {
@@ -96,14 +113,15 @@ const CommentItem = props => {
       
     } else {
         options = (<div className={classes.options}>
-            <button  className={classes['button-icon']}> <ReplyIcon />Reply</button >
+            <button onClick={replyCommentHandler}  className={classes['button-icon']}> <ReplyIcon />Reply</button >
         </div>)
     }
 
 
 
     return (
-        <Card className={classes['comment-item']}>
+        <Fragment>
+                <Card className={classes['comment-item']}>
             <div className={classes['score-desktop']}>
                 <ScoreButton disabledPlus={likedComments.includes(props.id)}  score={props.score} onPlus={plusHandler} onMinus={minusHandler}/>
             </div>
@@ -128,7 +146,6 @@ const CommentItem = props => {
                     {props.content}
                 </p>}
                 {editMode && <TextArea ref={editMsg} rows="3" defaultValue={props.content}/>}
-
             </div>
             <div className={classes.actions}>
                 <ScoreButton disabledPlus={likedComments.includes(props.id)}  score={props.score} onPlus={plusHandler} onMinus={minusHandler}/>
@@ -137,7 +154,12 @@ const CommentItem = props => {
                 </div>
                
             </div>
+
         </Card>
+            {replyMode && <CommentItemForm currentUser={currentUser} onSubmit={submitReplyHandler}/>}
+
+        </Fragment>
+    
     )
 }
 

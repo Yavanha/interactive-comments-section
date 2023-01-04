@@ -10,6 +10,7 @@ const CommentsContext = React.createContext({
     resetBackup : () => {},
     changeScore : (data) => {},
     editComment : (data) => {},
+    replyComment : (reply) => {},
 })
 
 export default CommentsContext

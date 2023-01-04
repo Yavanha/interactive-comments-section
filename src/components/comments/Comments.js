@@ -14,8 +14,15 @@ const Comments = props => {
 
     const commentsCtx = useContext(CommentsContext)
 
+    
+    const onSubmitCommentHandler = (data) => {  
 
-
+        const comment = {
+            ...data,
+            replies : []
+        }
+        commentsCtx.addComment(comment)
+    }
 
 
     const comments = commentsCtx.comments.map(comment =>
@@ -43,7 +50,7 @@ const Comments = props => {
     return (
         <section className={classes.comments}>
             {comments}
-            <CommentItemForm currentUser={datasJSON.currentUser} />
+            <CommentItemForm currentUser={datasJSON.currentUser} rows="3"  onSubmit={onSubmitCommentHandler} />
         </section>
     )
 }

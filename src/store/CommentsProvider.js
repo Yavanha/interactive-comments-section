@@ -22,20 +22,50 @@ const commentReducer = (state, action) => {
         }
     }
 
+    if(action.type === 'REPLY_COMMENT') {
+        updatedComments = [...state.comments]
+        const reply = {
+            id : action.reply.id,
+            content : action.reply.content,
+            createdAt : action.reply.createdAt,
+            score : action.reply.score,
+            replyingTo : action.reply.replyingTo,
+            user : {
+                image : {...action.reply.user.image},
+                username: action.reply.user.username
+            },
+            
+
+        }
+        const commentIndex = updatedComments.findIndex(c => c.id === action.reply.target)
+        
+        const updatedReplies = [...updatedComments[commentIndex].replies, reply]
+        updatedComments[commentIndex] = {
+            ...updatedComments[commentIndex],
+            replies: updatedReplies
+        }
+
+          return {
+            ...state,
+            comments: updatedComments,
+        }
+
+    }
+
     if (action.type === 'EDIT_COMMENT') {
         updatedComments = [...state.comments]
 
-        if(action.data.parent !== undefined) { 
+        if (action.data.parent !== undefined) {
             const commentIndex = updatedComments.findIndex(c => c.id === action.data.parent)
             const updatedReplies = [...updatedComments[commentIndex].replies]
             const replyIndex = updatedReplies.findIndex(c => c.id === action.data.id)
-            
+
             updatedReplies[replyIndex] = {
                 ...updatedReplies[replyIndex],
                 content: action.data.content
             }
 
-            
+
             updatedComments[commentIndex] = {
                 ...updatedComments[commentIndex],
                 replies: updatedReplies
@@ -83,7 +113,7 @@ const commentReducer = (state, action) => {
             } else if (action.data.mode === 'MINUS') {
                 updatedCurrentUser = {
                     ...state.currentUser,
-                    likedReplies: state.currentUser.likedReplies.filter(r =>  r !== action.data.id)
+                    likedReplies: state.currentUser.likedReplies.filter(r => r !== action.data.id)
                 }
             }
 
@@ -101,7 +131,7 @@ const commentReducer = (state, action) => {
                     ...state.currentUser,
                     likedComments: [...state.currentUser.likedComments, action.data.id]
                 }
-            } else if (action.data.mode === 'MINUS'){
+            } else if (action.data.mode === 'MINUS') {
                 updatedCurrentUser = {
                     ...state.currentUser,
                     likedComments: state.currentUser.likedComments.filter(c => c !== action.data.id)
@@ -206,6 +236,13 @@ const CommnentsProvider = props => {
 
     }
 
+    const replyCommentHandler = reply => {
+        dispatchCommentAction({
+            type: 'REPLY_COMMENT',
+            reply
+        })
+    }
+
 
 
     const commentsContext = {
@@ -216,7 +253,8 @@ const CommnentsProvider = props => {
         saveBackup: saveBackupHandler,
         resetBackup: resetBackupHandler,
         changeScore: changeScoreHandler,
-        editComment : editCommentHandler
+        editComment: editCommentHandler,
+        replyComment: replyCommentHandler
     }
 
 
